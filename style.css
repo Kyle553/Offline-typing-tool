@@ -10,27 +10,48 @@ html, body {
   min-height: 100vh;
 }
 
-body {
-  font-family: Arial, Helvetica, sans-serif;
-  word-break: break-word;
-  white-space: normal;
-  letter-spacing: -0.5px; 
-  line-height: 1.2;        
-  hyphens: auto;      
-  font-size: 80px;     
-  text-align: justify;   
+body { 
   background-color: rgb(92, 91, 91);
-  color: rgb(41, 40, 40);
   display: flex;
   justify-content: center;
   align-items: center;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 #typing_area {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
   width: 80%;
   height: 70%;
+  background-color: rgb(134, 159, 180);
+
+  word-break: break-word;
+  white-space: normal;
+  letter-spacing: -0.5px;  /* можна зменшити інтервал між літерами */
+  hyphens: auto;           /* автоматичне перенесення слів (якщо підтримується) */
+  text-align: justify;     /* розтягування тексту на всю ширину */
+}
+
+#typing_stats {
+  width: 100%;
+  height: 10%;
+  background-color: rgb(42, 47, 51);
+  font-size: 40px;
+  color: rgb(231, 231, 231);
+  padding: 0px 20px;
+  display: flex;
+  align-items: center;
+}
+
+#target_char {
+  width: 100%;
+  height: 90%;
   background-color: rgb(188, 223, 253);
+  font-size: 80px; 
+  color: rgb(41, 40, 40);
+  line-height: 1;        /* трохи зменшити міжрядковий інтервал */
+  word-spacing: -10px;   /* Зменшує відстань між словами */
 
 
-  
 }
