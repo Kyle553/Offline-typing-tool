@@ -2,6 +2,8 @@ const text = "All visuals and music in this video are 100% crafted by talented h
 const currentIndex = 0;
 // let typedChar = "";
 
+const target_char = document.getElementById("target_char");
+
 (function renderText ( text ) {
   let words = [];
   words = text.trim().split(/\s+/);
@@ -13,8 +15,10 @@ const currentIndex = 0;
   console.log(words);
 
 
-  words.forEach((element, index) => {
+  words.forEach(( element ) => {
     const createdDiv = document.createElement("div");
+    createdDiv.classList.add("word");
+    target_char.appendChild(createdDiv);
     console.log(element);
     
     for (let i = 0; i < element.length; i++) {
@@ -22,21 +26,12 @@ const currentIndex = 0;
       createdSpan.textContent = element[i];
       createdDiv.appendChild(createdSpan);
     }
-
-
-    const target_char = document.getElementById("target_char");
-    target_char.appendChild(createdDiv);
-
   });
 })(text);
 
 
 
-
-
-
-
-// document.addEventListener("keydown", (event) => {
-
+// target_char.addEventListener("click", (event) => {
+//   target_char.style.backgroundColor = "white"
 // });
 
