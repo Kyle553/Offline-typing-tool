@@ -2,77 +2,72 @@ const text = "All visuals and music in this video ";
 // are 100% crafted by talented human artists, without the use of AI. We’re committed to delivering genuine, hand-made creations for our audience to enjoy.
 let charIndex = 0;
 let wordIndex = 0;
-let words = [];
+let words = text.trim().split(/\s+/);
+console.log(words);
 
 const target_char = document.getElementById("target_char");
 
-(function renderText ( text ) {
-  words = text.trim().split(/\s+/);
-  console.log(words);
-
-  for (let i = 0; i < words.length; i++) {
-    words[i] = words[i].split("");
-  }
-  console.log(words);
-
-
-  words.forEach(( element ) => {
+(function renderText () {
+  for (let element of words) {
     const createdDiv = document.createElement("div");
     createdDiv.classList.add("word");
     target_char.appendChild(createdDiv);
-    console.log(element);
-    
-    for (let i = 0; i < element.length; i++) {
+
+    for (let char of element) {
       const createdSpan = document.createElement("span");
-      createdSpan.textContent = element[i];
+      createdSpan.textContent = char;
       createdDiv.appendChild(createdSpan);
     }
-  });
-})(text);
+  }
+})();
 
-target_char.addEventListener("click", (event) => {
-  const allWords = document.querySelectorAll(".word");
-  console.log(words.length);
-  console.log(allWords[2]);
-
-  document.addEventListener("keyup", (event) => {
+// target_char.focus();
+// замінити click на focus
+target_char.addEventListener("click", () => { 
+  //замінити document на target_char
+  document.addEventListener("keydown", (event) => {
     const allWords = document.querySelectorAll(".word");
-    const currentWordDiv = allWords[wordIndex];
-    const charSpans = currentWordDiv.querySelectorAll("span");
-    const currentSpan = charSpans[charIndex];
+    const currentWord = allWords[wordIndex];
+    const allChar = currentWord.querySelectorAll("span");
+    const currentSpan = allChar[charIndex];
 
-    if (event.key !== "Backspace") {
-      if (event.key.length === 1) {
-        if (charIndex < words[wordIndex].length) {
-          if (words[wordIndex][charIndex] === event.key ) {
-            currentSpan.classList.add("correct");
-            charIndex += 1;
-            console.log("TAAAAAAAAAAAAK");
-            console.log(words[wordIndex][charIndex]);
-          } else {
-            console.log("NIIIIIIIIIIIIIII");
-            console.log(words[wordIndex][charIndex]);
-            currentSpan.classList.add("incorrect");
-            charIndex += 1;
-          }
-        } else {
-          if (event.key === " ") {
-            wordIndex += 1;
-            charIndex = 0;
-          } else {
-  
-          }
-        }
+    if (event.key === " " && wordIndex < (words.length - 1)) {
+      wordIndex += 1;
+      charIndex = 0;
+      return;
+    } 
+
+    // if (event.key === "Backspace") {
+    //   if (charIndex === 0) {
+    //     wordIndex -= 1;
+    //     charIndex = words[wordIndex].length;
+    //   } else {
+    //     charIndex -= 1;
+    //     currentSpan.classList.remove("correct", "incorrect");
+    //     console.log(words[wordIndex][charIndex + 1]);
+    //   }
+    //   return;
+    // }
+
+    if (event.key.length !== 1) {
+      return;
+    }
+
+    if (charIndex < words[wordIndex].length) {
+      if (words[wordIndex][charIndex] === event.key ) {
+        currentSpan.classList.add("correct");
+        charIndex += 1;
+        console.log("TAAAAAAAAAAAAK");
+        console.log(words[wordIndex][charIndex]);
+      } else {
+        console.log("NIIIIIIIIIIIIIII");
+        console.log(words[wordIndex][charIndex]);
+        currentSpan.classList.add("incorrect");
+        charIndex += 1;
       }
-    } else {
-      if (charIndex < (words[wordIndex].length + 1)) {
-        charIndex -= 1;
-        currentSpan.classList.remove("correct", "incorrect");
-    
-        console.log(words[wordIndex][charIndex + 1]);
-      }
-      
     }
   });
 });
+
+
 

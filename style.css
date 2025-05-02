@@ -56,6 +56,10 @@ body {
   word-spacing: -10px;   
 }
 
+#target_char:focus {
+  outline: 2px solid rgb(95, 123, 212);
+}
+
 .word {
   margin: 12px;
 }
