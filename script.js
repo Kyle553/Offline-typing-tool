@@ -29,7 +29,7 @@ target_char.addEventListener("click", () => {
     const allWords = document.querySelectorAll(".word");
     const currentWord = allWords[wordIndex];
     const allChar = currentWord.querySelectorAll("span");
-    const currentSpan = allChar[charIndex];
+    let currentSpan = allChar[charIndex];
 
     if (event.key === " " && wordIndex < (words.length - 1)) {
       wordIndex += 1;
@@ -38,13 +38,14 @@ target_char.addEventListener("click", () => {
     } 
 
     // if (event.key === "Backspace") {
-    //   if (charIndex === 0) {
-    //     wordIndex -= 1;
+    //   if (charIndex === 0 && wordIndex !== 0) {
+    //     wordIndex -= 1
     //     charIndex = words[wordIndex].length;
-    //   } else {
+    //   }
+    //   if (charIndex > 0) {
     //     charIndex -= 1;
+    //     currentSpan = allChar[charIndex];
     //     currentSpan.classList.remove("correct", "incorrect");
-    //     console.log(words[wordIndex][charIndex + 1]);
     //   }
     //   return;
     // }
@@ -54,20 +55,11 @@ target_char.addEventListener("click", () => {
     }
 
     if (charIndex < words[wordIndex].length) {
-      if (words[wordIndex][charIndex] === event.key ) {
-        currentSpan.classList.add("correct");
+        const className = words[wordIndex][charIndex] === event.key ? "correct" : "incorrect"
+        currentSpan.classList.add(className);
         charIndex += 1;
-        console.log("TAAAAAAAAAAAAK");
-        console.log(words[wordIndex][charIndex]);
-      } else {
-        console.log("NIIIIIIIIIIIIIII");
-        console.log(words[wordIndex][charIndex]);
-        currentSpan.classList.add("incorrect");
-        charIndex += 1;
-      }
     }
   });
 });
 
-
-
+// currentWordDOM, currentSpanDOM, currentWord
