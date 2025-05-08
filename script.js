@@ -28,32 +28,37 @@ target_char.addEventListener("click", () => {
   document.addEventListener("keydown", typingText);
 });
 
+let lastWord = null;
+let lastChar = null;
+
 function typingText (event) {
   const allWords = document.querySelectorAll(".word");
   const currentWord = allWords[wordIndex];
   const allChar = currentWord.querySelectorAll("span");
   let currentSpan = allChar[charIndex];
 
-  let lastChar = null;
-  let lastWord = null;
-
   if (event.key === " " && wordIndex < (words.length - 1)) {
+    lastWord = wordIndex;
+    lastChar = charIndex;
     wordIndex += 1;
     charIndex = 0;
-    lastChar = charIndex;
-    lastWord = wordIndex;
     return;
   } 
 
-  // if (lastWord === words[wordIndex - 1] && lastChar !== words[wordIndex - 1].at(-1))
   if (event.key === "Backspace") {
+    if ((words[lastWord] === words[wordIndex - 1]) && (lastChar < (words[lastWord].length - 1)) && (charIndex === 0)) {
+      wordIndex = lastWord;
+      charIndex = lastChar;
+      return;
+    }
+
     if (charIndex === 0 && wordIndex > 0) {
       wordIndex -= 1;
       charIndex = words[wordIndex].length;
       return;
     } 
     
-    if (charIndex > 0) {  
+    if (charIndex > 0) { 
       charIndex -= 1;
       currentSpan = allChar[charIndex];
       currentSpan.classList.remove("correct", "incorrect");
