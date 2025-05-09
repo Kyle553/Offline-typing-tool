@@ -64,6 +64,15 @@ body {
   margin: 12px;
 }
 
+.finishedWord {
+  /* Null */
+}
+
+.unfinishedWord {
+  /* Null */
+}
+
+/* ????? */
 .word_active {
   margin: 12px;
   color: rgb(75, 75, 168);
@@ -78,3 +87,7 @@ body {
   margin: 12px;
   color: rgb(168, 75, 75);
 }
+
+.extra {
+  color: rgb(117, 50, 50);
+} 

@@ -1,8 +1,10 @@
 const text = "123 All visuals and music in this video ";
 // are 100% crafted by talented human artists, without the use of AI. We’re committed to delivering genuine, hand-made creations for our audience to enjoy.
-let charIndex = 0;
+const words = text.trim().split(/\s+/);
 let wordIndex = 0;
-let words = text.trim().split(/\s+/);
+let charIndex = 0;
+let unfinishedWords = [];
+let extraChars = [];
 
 const target_char = document.getElementById("target_char");
 
@@ -28,53 +30,76 @@ target_char.addEventListener("click", () => {
   document.addEventListener("keydown", typingText);
 });
 
-let lastWord = null;
-let lastChar = null;
 
 function typingText (event) {
-  const allWords = document.querySelectorAll(".word");
-  const currentWord = allWords[wordIndex];
-  const allChar = currentWord.querySelectorAll("span");
-  let currentSpan = allChar[charIndex];
+  // Зробити глобальними?
+  const allWordsDOM = document.querySelectorAll(".word");
+  let currentWordDOM = allWordsDOM[wordIndex];
+  const allCharsDOM = currentWordDOM.querySelectorAll("span");
+  let currentCharDOM = allCharsDOM[charIndex];
+
+  let currentWord = words[wordIndex];
 
   if (event.key === " " && wordIndex < (words.length - 1)) {
-    lastWord = wordIndex;
-    lastChar = charIndex;
+    if (charIndex < currentWord.length) {
+      currentWordDOM.classList.add("unfinishedWords");
+      unfinishedWords.push({indexChar: charIndex, indexWord: wordIndex});
+    }
+
     wordIndex += 1;
+    currentWord = words[wordIndex];
     charIndex = 0;
     return;
   } 
 
   if (event.key === "Backspace") {
-    if ((words[lastWord] === words[wordIndex - 1]) && (lastChar < (words[lastWord].length - 1)) && (charIndex === 0)) {
-      wordIndex = lastWord;
-      charIndex = lastChar;
-      return;
-    }
-
     if (charIndex === 0 && wordIndex > 0) {
       wordIndex -= 1;
-      charIndex = words[wordIndex].length;
+      currentWord = words[wordIndex];
+
+      // let extraChar = null
+      // Не currentWordDOM на div не накладується extra
+      // if (currentWordDOM.classList.contains("extra")) {
+      //   extraChar = extraChars.find((element) => element.indexWord === wordIndex);
+      //   charIndex = extraChar.indexChar;
+      // }
+      
+      let unfinishedChar = null
+      currentWordDOM = allWordsDOM[wordIndex];
+      if (currentWordDOM.classList.contains("unfinishedWords")) {
+        unfinishedChar = unfinishedWords.find((element) => element.indexWord === wordIndex)?.indexChar;
+        charIndex = unfinishedChar;
+      }
+
+      unfinishedChar === null || extraChar === null ? charIndex = currentWord.length : null;
       return;
     } 
     
     if (charIndex > 0) { 
       charIndex -= 1;
-      currentSpan = allChar[charIndex];
-      currentSpan.classList.remove("correct", "incorrect");
+      currentCharDOM = allCharsDOM[charIndex];
+
+      charIndex < currentWord.length ? currentCharDOM.classList.remove("correct", "incorrect") : currentCharDOM.remove();
       return;
-    }
+    } 
   }
 
   if (event.key.length !== 1) {
     return;
   }
 
-  if (charIndex < words[wordIndex].length) {
-      const className = words[wordIndex][charIndex] === event.key ? "correct" : "incorrect"
-      currentSpan.classList.add(className);
+  if (charIndex < currentWord.length) {
+      const className = currentWord[charIndex] === event.key ? "correct" : "incorrect"
+      currentCharDOM.classList.add(className);
       charIndex += 1;
       return;
+  } else {
+    const createdExtraSpan = document.createElement("span");
+    createdExtraSpan.textContent = event.key;
+    createdExtraSpan.classList.add("incorrect", "extra")
+    currentWordDOM.appendChild(createdExtraSpan);
+
+    extraChars.push({indexChar: charIndex, indexWord: wordIndex, char: event.key})
+    charIndex += 1;
   }
-  // currentWordDOM, currentSpanDOM, currentWord
 }
