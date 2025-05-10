@@ -32,53 +32,67 @@ target_char.addEventListener("click", () => {
 
 
 function typingText (event) {
-  // Зробити глобальними?
   const allWordsDOM = document.querySelectorAll(".word");
   let currentWordDOM = allWordsDOM[wordIndex];
   const allCharsDOM = currentWordDOM.querySelectorAll("span");
   let currentCharDOM = allCharsDOM[charIndex];
-
+  
   let currentWord = words[wordIndex];
+  function getExtraCharIndex() {
+    return extraChars.findIndex((element) => element.indexWord === wordIndex);
+  }
+  let extraCharIndex = getExtraCharIndex();
 
+  function getUnfinishedWordIndex() {
+    return unfinishedWords.findIndex((element) => element.indexWord === wordIndex);
+  }
+  let unfinishedWordIndex = getUnfinishedWordIndex();
+  
   if (event.key === " " && wordIndex < (words.length - 1)) {
     if (charIndex < currentWord.length) {
       currentWordDOM.classList.add("unfinishedWords");
-      unfinishedWords.push({indexChar: charIndex, indexWord: wordIndex});
-    }
 
+      if (unfinishedWordIndex >= 0) {
+        unfinishedWords[unfinishedWordIndex].indexChar = charIndex;
+      } else {
+        unfinishedWords.push({indexChar: charIndex, indexWord: wordIndex, index: unfinishedWords.length});   
+      }
+      console.log(unfinishedWords);
+    }
+    
     wordIndex += 1;
     currentWord = words[wordIndex];
     charIndex = 0;
     return;
   } 
-
+  
   if (event.key === "Backspace") {
     if (charIndex === 0 && wordIndex > 0) {
       wordIndex -= 1;
       currentWord = words[wordIndex];
-
-      // let extraChar = null
-      // Не currentWordDOM на div не накладується extra
-      // if (currentWordDOM.classList.contains("extra")) {
-      //   extraChar = extraChars.find((element) => element.indexWord === wordIndex);
-      //   charIndex = extraChar.indexChar;
-      // }
+      
+      extraCharIndex = getExtraCharIndex();
+      if (extraCharIndex >= 0) {
+        charIndex = extraChars[extraCharIndex].indexChar + 1;
+        return
+      }
       
       let unfinishedChar = null
       currentWordDOM = allWordsDOM[wordIndex];
       if (currentWordDOM.classList.contains("unfinishedWords")) {
         unfinishedChar = unfinishedWords.find((element) => element.indexWord === wordIndex)?.indexChar;
+
         charIndex = unfinishedChar;
       }
 
-      unfinishedChar === null || extraChar === null ? charIndex = currentWord.length : null;
+      unfinishedChar === null ? charIndex = currentWord.length : null;
       return;
     } 
     
     if (charIndex > 0) { 
       charIndex -= 1;
       currentCharDOM = allCharsDOM[charIndex];
-
+      
       charIndex < currentWord.length ? currentCharDOM.classList.remove("correct", "incorrect") : currentCharDOM.remove();
       return;
     } 
@@ -89,17 +103,22 @@ function typingText (event) {
   }
 
   if (charIndex < currentWord.length) {
-      const className = currentWord[charIndex] === event.key ? "correct" : "incorrect"
+      const className = currentWord[charIndex] === event.key ? "correct" : "incorrect";
       currentCharDOM.classList.add(className);
       charIndex += 1;
       return;
   } else {
     const createdExtraSpan = document.createElement("span");
     createdExtraSpan.textContent = event.key;
-    createdExtraSpan.classList.add("incorrect", "extra")
+    createdExtraSpan.classList.add("incorrect", "extra");
     currentWordDOM.appendChild(createdExtraSpan);
 
-    extraChars.push({indexChar: charIndex, indexWord: wordIndex, char: event.key})
+    if (extraCharIndex >= 0) {
+      extraChars[extraCharIndex].indexChar = charIndex;
+    } else {
+      extraChars.push({indexChar: charIndex, indexWord: wordIndex});
+    }
+
     charIndex += 1;
   }
 }
