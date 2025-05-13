@@ -32,93 +32,107 @@ target_char.addEventListener("click", () => {
 
 
 function typingText (event) {
+  function getCharIndex(array, wordIndex) {
+    return array.find((element) => element.indexWord === wordIndex)?.indexChar;
+  }
+
+  function getElemIndex(array, wordIndex) {
+    return array.findIndex((element) => element.indexWord === wordIndex);
+  }
+
   const allWordsDOM = document.querySelectorAll(".word");
   let currentWordDOM = allWordsDOM[wordIndex];
   const allCharsDOM = currentWordDOM.querySelectorAll("span");
   let currentCharDOM = allCharsDOM[charIndex];
-  
-  let currentWord = words[wordIndex];
-  function getExtraCharIndex() {
-    return extraChars.findIndex((element) => element.indexWord === wordIndex);
-  }
-  let extraCharIndex = getExtraCharIndex();
 
-  function getUnfinishedWordIndex() {
-    return unfinishedWords.findIndex((element) => element.indexWord === wordIndex);
+  let currentWord = words[wordIndex];
+  let unfElementIndex = null;
+
+  if (event.key === " ") {
+    spase();
+    return;
   }
-  let unfinishedWordIndex = getUnfinishedWordIndex();
   
-  if (event.key === " " && wordIndex < (words.length - 1)) {
+  if (event.key === "Backspace") {
+    backspace();
+    return;
+  }
+  
+  if (event.key.length === 1) {
+    classes();
+    return;
+  }
+
+  function spase () {
+    if (wordIndex === (words.length - 1)) {
+      return;
+    } 
+
     if (charIndex < currentWord.length) {
       currentWordDOM.classList.add("unfinishedWords");
 
-      if (unfinishedWordIndex >= 0) {
-        unfinishedWords[unfinishedWordIndex].indexChar = charIndex;
+      unfElementIndex = getElemIndex(unfinishedWords, wordIndex);
+      if (unfElementIndex >= 0) {
+        unfinishedWords[unfElementIndex].indexChar = charIndex;
       } else {
-        unfinishedWords.push({indexChar: charIndex, indexWord: wordIndex, index: unfinishedWords.length});   
+        unfinishedWords.push({indexChar: charIndex, indexWord: wordIndex});
       }
-      console.log(unfinishedWords);
     }
-    
+
     wordIndex += 1;
     currentWord = words[wordIndex];
     charIndex = 0;
-    return;
-  } 
+  };
   
-  if (event.key === "Backspace") {
+  function backspace () {
+    const unfWord = currentWordDOM.classList.contains("unfinishedWords");
+    
+    if (wordIndex === 0 && charIndex === 0 && unfWord) {
+      currentWordDOM.classList.remove("unfinishedWords");
+    }
+
     if (charIndex === 0 && wordIndex > 0) {
+      if (unfWord) {
+        currentWordDOM.classList.remove("unfinishedWords");
+        unfElementIndex = getElemIndex(unfinishedWords, wordIndex);
+        unfinishedWords.splice(unfElementIndex, 1);
+      }
+
       wordIndex -= 1;
       currentWord = words[wordIndex];
       
-      extraCharIndex = getExtraCharIndex();
-      if (extraCharIndex >= 0) {
-        charIndex = extraChars[extraCharIndex].indexChar + 1;
-        return
-      }
-      
-      let unfinishedChar = null
+      let unfCharIndex = null;
       currentWordDOM = allWordsDOM[wordIndex];
-      if (currentWordDOM.classList.contains("unfinishedWords")) {
-        unfinishedChar = unfinishedWords.find((element) => element.indexWord === wordIndex)?.indexChar;
-
-        charIndex = unfinishedChar;
+      if (unfWord) {
+        unfCharIndex = getCharIndex(unfinishedWords, wordIndex);
+        charIndex = unfCharIndex;
       }
-
-      unfinishedChar === null ? charIndex = currentWord.length : null;
+    
+      unfCharIndex === null ? charIndex = currentWord.length : null;
       return;
     } 
     
     if (charIndex > 0) { 
       charIndex -= 1;
       currentCharDOM = allCharsDOM[charIndex];
-      
+    
       charIndex < currentWord.length ? currentCharDOM.classList.remove("correct", "incorrect") : currentCharDOM.remove();
-      return;
     } 
-  }
-
-  if (event.key.length !== 1) {
-    return;
-  }
-
-  if (charIndex < currentWord.length) {
+  };
+  
+  function classes () {
+    if (charIndex < currentWord.length) {
       const className = currentWord[charIndex] === event.key ? "correct" : "incorrect";
       currentCharDOM.classList.add(className);
       charIndex += 1;
-      return;
-  } else {
-    const createdExtraSpan = document.createElement("span");
-    createdExtraSpan.textContent = event.key;
-    createdExtraSpan.classList.add("incorrect", "extra");
-    currentWordDOM.appendChild(createdExtraSpan);
-
-    if (extraCharIndex >= 0) {
-      extraChars[extraCharIndex].indexChar = charIndex;
     } else {
-      extraChars.push({indexChar: charIndex, indexWord: wordIndex});
-    }
+      const createdExtraSpan = document.createElement("span");
+      createdExtraSpan.textContent = event.key;
+      createdExtraSpan.classList.add("incorrect", "extra");
+      currentWordDOM.appendChild(createdExtraSpan);
 
-    charIndex += 1;
-  }
+      extraChars.push({indexChar: charIndex, indexWord: wordIndex});
+      charIndex += 1;
+    }
+  };
 }
