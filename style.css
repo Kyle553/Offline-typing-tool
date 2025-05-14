@@ -81,11 +81,13 @@ body {
 .correct {
   margin: 12px;
   color: rgb(78, 168, 75);
+  background-color: green;
 }
 
 .incorrect {
   margin: 12px;
   color: rgb(168, 75, 75);
+  background-color: red;
 }
 
 .extra {
