@@ -1,6 +1,9 @@
+import { textParser } from "./textParser.js";
+
+const words = textParser();
 const target_charDOM = document.getElementById("target_char");
 
-function renderText(words) {
+function renderText() {
   for (let element of words) {
     const createdDiv = document.createElement("div");
     createdDiv.classList.add("word");
