@@ -1,10 +1,23 @@
 import { textParser } from "./textParser.js";
 
-
-
 const words = textParser();
 let wordIndex = 0;
 let charIndex = 0;
+
+function setClassDOM(elementDOM, classAdd = null, classRemove = null) {
+  const applyClasses = (classes, action) => {
+    if (classes !== null && Array.isArray(classes)) {
+      for (const className of classes) {
+        elementDOM.classList[action](className);
+      }
+    } else if (typeof classes === "string") {
+      elementDOM.classList[action](classes);
+    }
+  };
+
+  applyClasses(classAdd, "add");
+  applyClasses(classRemove, "remove");
+}
 
 function typingText(event) {
   const allWordsDOM = document.querySelectorAll(".word");
@@ -14,17 +27,6 @@ function typingText(event) {
   
   let currentWord = words[wordIndex];
 
-  function setCharClass(elementDOM, className = null) {
-    if (elementDOM.classList.length > 0) {
-      elementDOM.classList.remove("word_active", "correct", "incorrect")
-    }
-  
-    if (className) {
-      elementDOM.classList.add(className)
-      console.log(className, "xxxxxxxxxxxx");
-    }
-  }
-  
   function refreshVariables() {
     currentWordDOM = allWordsDOM[wordIndex];
     allCharsDOM = currentWordDOM.querySelectorAll("span");
@@ -43,7 +45,7 @@ function typingText(event) {
 
   function backspace() {
     if (charIndex === 0 && wordIndex > 0) {
-      setCharClass(currentCharDOM, null);
+      setClassDOM(currentCharDOM, null, "word_active");
 
       wordIndex -= 1;
 
@@ -51,7 +53,7 @@ function typingText(event) {
       charIndex = currentWord.length - 1;
 
       refreshVariables();
-      setCharClass(currentCharDOM, "word_active");
+      setClassDOM(currentCharDOM, "word_active", ["correct", "incorrect"]);
       return;
     }
 
@@ -61,54 +63,53 @@ function typingText(event) {
         && wordIndex === (words.length - 1)
         && !currentCharDOM.classList.contains("word_active")
       ) {
-        setCharClass(currentCharDOM, "word_active");
+        setClassDOM(currentCharDOM, "word_active", ["correct", "incorrect"]);
         return;
       }
 
-      setCharClass(currentCharDOM, null);
+      setClassDOM(currentCharDOM, null, "word_active");
       charIndex -= 1;
       refreshVariables();
-      setCharClass(currentCharDOM, "word_active");
+      setClassDOM(currentCharDOM, "word_active", ["correct", "incorrect"]);
     }
   };
-  
+
   function handleChar() {
-    let className = "";
-    if (
-      currentWord[charIndex] === event.key || 
-      (event.key === " " && currentWord[charIndex] === "\u00A0")
-    ) {
-      className = "correct";
-    } else {
-      className = "incorrect";
-    }
-    console.log(className, "aaaaaa")
-    setCharClass(currentCharDOM, className);
+
+    const className = 
+      currentWord[charIndex] === event.key  
+      || (event.key === " " && currentWord[charIndex] === "\u00A0")
+      ? "correct"
+      : "incorrect";
+
+    setClassDOM(currentCharDOM, className, null);
 
     if (charIndex < (currentWord.length - 1)) {
-
-    // ???????????????????????????????????????????????????
-      currentCharDOM.classList.remove("word_active")
+      setClassDOM(currentCharDOM, null, "word_active");
       charIndex += 1;
       refreshVariables();
-      setCharClass(currentCharDOM, "word_active");
+      setClassDOM(currentCharDOM, "word_active", null);
       return;
     }
 
     if (charIndex === (currentWord.length - 1) && wordIndex < (words.length - 1)) {
-      setCharClass(currentCharDOM, null);
+      setClassDOM(currentCharDOM, null, "word_active");
       wordIndex += 1;
       charIndex = 0;  
       refreshVariables();
-      setCharClass(currentCharDOM, "word_active");
+      setClassDOM(currentCharDOM, "word_active", null);
       return;
     }
 
     if (charIndex === (currentWord.length - 1) && wordIndex === (words.length - 1)) {
-      setCharClass(currentCharDOM, null);
+      setClassDOM(currentCharDOM, null, "word_active");
     }
   };
-}
+  
+  if (charIndex === (currentWord.length - 1) && wordIndex === (words.length - 1)) {
+    document.removeEventListener("keydown", typingText);
+  }
+};
 
 export { typingText, wordIndex, charIndex};
 
