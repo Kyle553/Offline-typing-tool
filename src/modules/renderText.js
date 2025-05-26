@@ -17,4 +17,6 @@ function renderText() {
   }
 };
 
+renderText(words);
+
 export { renderText };
