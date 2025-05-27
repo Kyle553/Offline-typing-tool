@@ -1,12 +1,18 @@
-// import { index } from "../modules/utils";
+import { i } from "./indexes.js";
 
-// const allWordsDOM = document.querySelectorAll(".word");
-// let currentWordDOM = allWordsDOM[i.word];
-// let allCharsDOM = currentWordDOM.querySelectorAll("span");
-// let currentCharDOM = allCharsDOM[i.char];
+let dom = {
+  allWords: document.querySelectorAll(".word"),
+  currentWord: null,
+  allChars: null,
+  currentChar: null,
 
-// function domElements() {
-//   return { allWordsDOM, currentWordDOM, allCharsDOM, currentCharDOM }
-// }
+  refresh() {
+    this.currentWord = this.allWords[i.word];
+    this.allChars = this.currentWord.querySelectorAll("span");
+    this.currentChar = this.allChars[i.char];
+  }
+};
 
-export { domElements, refreshVariables };
+dom.refresh();
+
+export { dom };
