@@ -3,6 +3,7 @@ import "./modules/renderText.js";
 import { i } from "./utils/indexes.js";
 import { dom } from "./utils/ElementsDOM.js";
 import { typingText } from "./modules/typingText.js";
+import "./modules/lineScroller.js";
 
 const target_charDOM = document.getElementById("target_char");
 
