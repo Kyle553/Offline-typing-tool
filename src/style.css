@@ -23,7 +23,7 @@ body {
   flex-direction: column;
   gap: 20px;
   width: 1400px;
-  height: 350px;
+  height: 394px;
   background-color: rgb(134, 159, 180);
 
   word-break: break-word;
@@ -47,15 +47,14 @@ body {
 #target_char {
   display: flex;
   flex-wrap: wrap;
+  gap: 4px;
   width: 100%;
   height: 100%;
   background-color: rgb(188, 223, 253);
   font-size: 80px; 
   color: rgb(41, 40, 40);
-  line-height: 1; 
+  line-height: 96px;
   word-spacing: -10px;  
-  overflow-y: auto;
-  overflow-x: hidden;  
   overflow: hidden;
 }
 
@@ -63,9 +62,9 @@ body {
   outline: 2px solid rgb(95, 123, 212);
 }
 
-.word {
-  padding: 3px;
-}
+/* .word {;
+
+} */
 
 .word_active {
   color: rgb(75, 75, 168);
@@ -85,3 +84,4 @@ body {
 .extra {
   color: rgb(117, 50, 50);
 } 
+

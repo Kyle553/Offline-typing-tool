@@ -27,7 +27,7 @@ function typingText(event) {
 
       dom.refresh();
       setClassDOM(dom.currentChar, "word_active", ["correct", "incorrect"]);
-      dom.currentChar.scrollIntoView({ behavior: "smooth" });
+      dom.currentChar.scrollIntoView({ behavior: "smooth", block: "center" });
       return;
     }
 
@@ -70,7 +70,7 @@ function typingText(event) {
       i.word += 1;
       i.char = 0;  
       dom.refresh();
-      dom.currentChar.scrollIntoView({ behavior: "smooth" });
+      dom.currentChar.scrollIntoView({ behavior: "smooth", block: "center" });
       setClassDOM(dom.currentChar, "word_active", null);
       return;
     }
