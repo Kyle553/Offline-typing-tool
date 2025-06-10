@@ -1,7 +1,7 @@
-import { words } from "./modules/textParser.js";
+import { words } from "./utils/textParser.js";
 import "./modules/renderText.js";
-import { i } from "./utils/indexes.js";
-import { dom } from "./utils/ElementsDOM.js";
+import { i } from "./modules/indexes.js";
+import { dom } from "./modules/elementsDOM.js";
 import { typingText } from "./modules/typingText.js";
 import "./modules/lineScroller.js";
 

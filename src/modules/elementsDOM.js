@@ -15,4 +15,9 @@ let dom = {
 
 dom.refresh();
 
-export { dom };
+function isCorrect() {
+  dom.refresh();
+  return dom.currentChar.classList.contains("correct") ? "correct" : "incorrect";
+}
+
+export { dom, isCorrect };

@@ -1,16 +1,19 @@
-function setClassDOM(elementDOM, classAdd = null, classRemove = null) {
-  const applyClasses = (classes, action) => {
-    if (Array.isArray(classes)) {
-      for (const className of classes) {
-        elementDOM.classList[action](className);
-      }
-    } else if (typeof classes === "string") {
-      elementDOM.classList[action](classes);
-    }
-  };
+function setClassDOM( elementDOM, classes ) {
+  classes = Array.isArray(classes) ? classes : [classes];
 
-  applyClasses(classAdd, "add");
-  applyClasses(classRemove, "remove");
+  for (let element of classes) {
+    if (typeof element !== "string") {
+      element = `"${element}"`;
+    }
+
+    const hasClass = elementDOM.classList.contains(element);
+
+    if (hasClass) {
+      elementDOM.classList.remove(element);
+    } else {
+      elementDOM.classList.add(element);
+    }
+  }
 }
 
 export { setClassDOM };

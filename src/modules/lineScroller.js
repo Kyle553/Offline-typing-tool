@@ -1,6 +1,6 @@
-import { words } from "./textParser.js";
-import { i } from "../utils/indexes.js";
-import { dom } from "../utils/ElementsDOM.js";
+import { words } from "../utils/textParser.js";
+import { i } from "./indexes.js";
+import { dom } from "./elementsDOM.js";
 import { setClassDOM } from "../utils/setClassDOM.js";
 
 // let minNum;

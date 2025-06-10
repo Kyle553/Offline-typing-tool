@@ -1,4 +1,4 @@
-import { words } from "./textParser.js";
+import { words } from "../utils/textParser.js";
 
 const target_charDOM = document.getElementById("target_char");
 
