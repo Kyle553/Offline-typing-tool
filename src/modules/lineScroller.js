@@ -1,7 +1,7 @@
-import { words } from "../utils/textParser.js";
+import { separatedWordsSpaces } from "../utils/textParser.js";
 import { i } from "./indexes.js";
 import { dom } from "./elementsDOM.js";
-import { setClassDOM } from "../utils/setClassDOM.js";
+import { setClasses } from "../utils/classManagerDOM.js";
 
 // let minNum;
 // let maxNum;

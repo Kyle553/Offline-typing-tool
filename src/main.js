@@ -1,10 +1,11 @@
-import { words } from "./utils/textParser.js";
+import { separatedWordsSpaces } from "./utils/textParser.js";
 import "./modules/renderText.js";
 import { i } from "./modules/indexes.js";
 import { dom } from "./modules/elementsDOM.js";
 import { typingText } from "./modules/typingText.js";
 import "./modules/lineScroller.js";
 
+const words = separatedWordsSpaces();
 const target_charDOM = document.getElementById("target_char");
 
 function focus() {

@@ -1,5 +1,6 @@
-import { words } from "../utils/textParser.js";
+import { separatedWordsSpaces } from "../utils/textParser.js";
 
+const words = separatedWordsSpaces();
 const target_charDOM = document.getElementById("target_char");
 
 for (let element of words) {
