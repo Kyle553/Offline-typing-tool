@@ -1,16 +1,15 @@
 import { separatedWordsSpaces } from "../utils/textParser.js";
-import { i } from "./indexes.js";
-import { dom, isCorrect } from "./elementsDOM.js";
+import { isCorrect } from "./elementsDOM.js";
 import { setClasses, containsClasses } from "../utils/classManagerDOM.js";
 
 const words = separatedWordsSpaces();
 
 
-function typingText(event) {
-  let currentWord = words[i.word];
+function typingText(event, index, newDOM) {
+  let currentWord = words[index.currentWord()];
 
   function isLastCharOfLastWord() {
-    return i.char === (currentWord.length - 1) && i.word === (words.length - 1) ? true : false;
+    return index.currentChar() === (currentWord.length - 1) && index.currentWord() === (words.length - 1) ? true : false;
   }
 
   if (event.key === "Backspace") {
@@ -24,71 +23,70 @@ function typingText(event) {
   }
 
   function backspace() {
-    if (i.char === 0 && i.word > 0) {
-      setClasses(dom.currentChar, "word_active");
+    if (index.currentChar() === 0 && index.currentWord() > 0) {
+      setClasses(newDOM.currentChar, "word_active");
 
-      i.word -= 1;
+      index.previousWord();
 
-      currentWord = words[i.word];
-      i.char = currentWord.length - 1;
+      currentWord = words[index.currentWord()];
+      index.replaceChar(currentWord.length - 1);
 
-      dom.refresh();
-      setClasses(dom.currentChar, ["word_active", isCorrect()]);
-      dom.currentChar.scrollIntoView({ behavior: "smooth", block: "center" });
+      newDOM.refresh();
+      setClasses(newDOM.currentChar, ["word_active", isCorrect()]);
+      newDOM.currentChar.scrollIntoView({ behavior: "smooth", block: "center" });
       return;
     }
 
-    if (i.char > 0) {
+    if (index.currentChar() > 0) {
       if (
-        i.char === (currentWord.length - 1) 
-        && i.word === (words.length - 1)
-        && !dom.currentChar.classList.contains("word_active")
+        index.currentChar() === (currentWord.length - 1) 
+        && index.currentWord() === (words.length - 1)
+        && !newDOM.currentChar.classList.contains("word_active")
       ) {
-        setClasses(dom.currentChar, ["word_active", isCorrect()]);
-        console.log(i.char, i.word, "умова")
+        setClasses(newDOM.currentChar, ["word_active", isCorrect()]);
         return;
       }
 
-      setClasses(dom.currentChar, "word_active");
-      i.char -= 1;
-      dom.refresh();
-      setClasses(dom.currentChar, ["word_active", isCorrect()]);
+      setClasses(newDOM.currentChar, "word_active");
+      index.previousChar();
+      newDOM.refresh();
+      setClasses(newDOM.currentChar, ["word_active", isCorrect()]);
     }
   };
 
   function handleTypingChar() {
-    if (isLastCharOfLastWord() && !containsClasses(dom.currentChar, "word_active")) {
+    if (isLastCharOfLastWord() && !containsClasses(newDOM.currentChar, "word_active")) {
       return;
     }
 
     const charStatusClass = 
-      currentWord[i.char] === event.key  
-      || (event.key === " " && currentWord[i.char] === "\u00A0")
+      currentWord[index.currentChar()] === event.key  
+      || (event.key === " " && currentWord[index.currentChar()] === "\u00A0")
       ? "correct"
       : "incorrect";
 
-    setClasses(dom.currentChar, charStatusClass);
+    setClasses(newDOM.currentChar, charStatusClass);
 
-    if (i.char < (currentWord.length - 1)) {
-      setClasses(dom.currentChar, "word_active");
-      i.char += 1;
-      dom.refresh();
-      setClasses(dom.currentChar, "word_active");
+    if (index.currentChar() < (currentWord.length - 1)) {
+      setClasses(newDOM.currentChar, "word_active");
+      index.nextChar();
+      newDOM.refresh();
+      setClasses(newDOM.currentChar, "word_active");
       return;
     }
 
-    if (i.char === (currentWord.length - 1) && i.word < (words.length - 1)) {
-      setClasses(dom.currentChar, "word_active");
-      i.word += 1;
-      i.char = 0;  
-      dom.refresh();
-      dom.currentChar.scrollIntoView({ behavior: "smooth", block: "center" });
-      setClasses(dom.currentChar, "word_active");
+    if (index.currentChar() === (currentWord.length - 1) && index.currentWord() < (words.length - 1)) {
+      setClasses(newDOM.currentChar, "word_active");
+      index.nextWord();
+      index.replaceChar(0);  
+      newDOM.refresh();
+      newDOM.currentChar.scrollIntoView({ behavior: "smooth", block: "center" });
+      setClasses(newDOM.currentChar, "word_active");
       return;
     }
 
     if (isLastCharOfLastWord()) {
-      setClasses(dom.currentChar, "word_active");
+      setClasses(newDOM.currentChar, "word_active");
     }
   };
 };

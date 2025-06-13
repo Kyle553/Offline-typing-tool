@@ -1,23 +1,23 @@
-import { i } from "./indexes.js";
-
-let dom = {
-  allWords: document.querySelectorAll(".word"),
-  currentWord: null,
-  allChars: null,
-  currentChar: null,
-
-  refresh() {
-    this.currentWord = this.allWords[i.word];
-    this.allChars = this.currentWord.querySelectorAll("span");
-    this.currentChar = this.allChars[i.char];
-  }
-};
-
-dom.refresh();
-
-function isCorrect() {
-  dom.refresh();
-  return dom.currentChar.classList.contains("correct") ? "correct" : "incorrect";
+function isCorrect(newDOM) {
+  newDOM.refresh();
+  return newDOM.currentChar.classList.contains("correct") ? "correct" : "incorrect";
 }
 
-export { dom, isCorrect };
+class elementsDOM {
+  constructor(indexes) {
+    this.indexes = indexes;
+    this.allWords = document.querySelectorAll(".word");
+    this.currentWord = null;
+    this.allChars = null;
+    this.currentChar = null;
+  }
+
+  refresh() {
+    // this.allWords = document.querySelectorAll(".wordI");
+    this.currentWord = this.allWords[this.indexes.wordI];
+    this.allChars = this.currentWord.querySelectorAll("span");
+    this.currentChar = this.allChars[this.indexes.charI];
+  }
+}
+
+export { isCorrect, elementsDOM };

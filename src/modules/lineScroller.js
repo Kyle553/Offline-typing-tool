@@ -1,6 +1,4 @@
 import { separatedWordsSpaces } from "../utils/textParser.js";
-import { i } from "./indexes.js";
-import { dom } from "./elementsDOM.js";
 import { setClasses } from "../utils/classManagerDOM.js";
 
 // let minNum;
