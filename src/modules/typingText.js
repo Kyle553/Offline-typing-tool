@@ -1,16 +1,8 @@
-import { separatedWordsSpaces } from "../utils/textParser.js";
-import { isCorrect } from "./elementsDOM.js";
-import { setClasses, containsClasses } from "../utils/classManagerDOM.js";
+import { setClasses, isCorrect} from "../utils/classManagerDOM.js";
+import { isLastChar, isLastWord } from "../utils/isLastElement.js";
 
-const words = separatedWordsSpaces();
-
-
-function typingText(event, index, newDOM) {
+function typingText(event, words, index, dom) {
   let currentWord = words[index.currentWord()];
-
-  function isLastCharOfLastWord() {
-    return index.currentChar() === (currentWord.length - 1) && index.currentWord() === (words.length - 1) ? true : false;
-  }
 
   if (event.key === "Backspace") {
     backspace();
@@ -24,38 +16,40 @@ function typingText(event, index, newDOM) {
 
   function backspace() {
     if (index.currentChar() === 0 && index.currentWord() > 0) {
-      setClasses(newDOM.currentChar, "word_active");
+      setClasses(dom.currentChar, "word_active");
 
       index.previousWord();
 
       currentWord = words[index.currentWord()];
       index.replaceChar(currentWord.length - 1);
 
-      newDOM.refresh();
-      setClasses(newDOM.currentChar, ["word_active", isCorrect()]);
-      newDOM.currentChar.scrollIntoView({ behavior: "smooth", block: "center" });
+      dom.refresh();
+      setClasses(dom.currentChar, ["word_active", isCorrect(dom.currentChar)]);
+      dom.currentChar.scrollIntoView({ behavior: "smooth", block: "center" });
       return;
     }
 
     if (index.currentChar() > 0) {
       if (
-        index.currentChar() === (currentWord.length - 1) 
-        && index.currentWord() === (words.length - 1)
-        && !newDOM.currentChar.classList.contains("word_active")
+        (isLastChar(words, index) && isLastWord(words, index)) 
+        && !dom.currentChar.classList.contains("word_active")
       ) {
-        setClasses(newDOM.currentChar, ["word_active", isCorrect()]);
+        setClasses(dom.currentChar, ["word_active", isCorrect(dom.currentChar)]);
         return;
       }
 
-      setClasses(newDOM.currentChar, "word_active");
+      setClasses(dom.currentChar, "word_active");
       index.previousChar();
-      newDOM.refresh();
-      setClasses(newDOM.currentChar, ["word_active", isCorrect()]);
+      dom.refresh();
+      setClasses(dom.currentChar, ["word_active", isCorrect(dom.currentChar)]);
     }
   };
 
   function handleTypingChar() {
-    if (isLastCharOfLastWord() && !containsClasses(newDOM.currentChar, "word_active")) {
+    if (
+      isLastChar(words, index) && isLastWord(words, index) 
+      && !dom.currentChar.classList.contains("word_active")
+    ) {
       return;
     }
 
@@ -65,31 +59,29 @@ function typingText(event, index, newDOM) {
       ? "correct"
       : "incorrect";
 
-    setClasses(newDOM.currentChar, charStatusClass);
+    setClasses(dom.currentChar, charStatusClass);
 
     if (index.currentChar() < (currentWord.length - 1)) {
-      setClasses(newDOM.currentChar, "word_active");
+      setClasses(dom.currentChar, "word_active");
       index.nextChar();
-      newDOM.refresh();
-      setClasses(newDOM.currentChar, "word_active");
+      dom.refresh();
+      setClasses(dom.currentChar, "word_active");
       return;
     }
 
-    if (index.currentChar() === (currentWord.length - 1) && index.currentWord() < (words.length - 1)) {
-      setClasses(newDOM.currentChar, "word_active");
+    if (isLastChar(words, index) && index.currentWord() < (words.length - 1)) {
+      setClasses(dom.currentChar, "word_active");
       index.nextWord();
-      index.replaceChar(0);  
-      newDOM.refresh();
-      newDOM.currentChar.scrollIntoView({ behavior: "smooth", block: "center" });
-      setClasses(newDOM.currentChar, "word_active");
+      dom.refresh();
+      dom.currentChar.scrollIntoView({ behavior: "smooth", block: "center" });
+      setClasses(dom.currentChar, "word_active");
       return;
     }
 
-    if (isLastCharOfLastWord()) {
-      setClasses(newDOM.currentChar, "word_active");
+    if (isLastChar(words, index) && isLastWord(words, index)) {
+      setClasses(dom.currentChar, "word_active");
     }
   };
 };
-
 
 export { typingText };

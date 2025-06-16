@@ -1,8 +1,3 @@
-function isCorrect(newDOM) {
-  newDOM.refresh();
-  return newDOM.currentChar.classList.contains("correct") ? "correct" : "incorrect";
-}
-
 class elementsDOM {
   constructor(indexes) {
     this.indexes = indexes;
@@ -13,11 +8,11 @@ class elementsDOM {
   }
 
   refresh() {
-    // this.allWords = document.querySelectorAll(".wordI");
-    this.currentWord = this.allWords[this.indexes.wordI];
+    // this.allWords = document.querySelectorAll(".word");
+    this.currentWord = this.allWords[this.indexes.currentWord()];
     this.allChars = this.currentWord.querySelectorAll("span");
-    this.currentChar = this.allChars[this.indexes.charI];
+    this.currentChar = this.allChars[this.indexes.currentChar()];
   }
 }
 
-export { isCorrect, elementsDOM };
+export { elementsDOM };

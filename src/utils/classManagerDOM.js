@@ -1,13 +1,7 @@
 function isString(isString) {
-  !Array.isArray(isString) ? isString = [isString] : null ;
+  Array.isArray(isString) ? null : isString = [isString] ;
 
-  for (let i = 0; i < isString.length; i++) {
-    if (typeof isString[i] !== "string") {
-      isString[i] = `"${isString[i]}"`;
-    }
-  }
-
-  return isString;
+  return isString.map(element => typeof element === "string" ? element : `"${element}"`);
 }
 
 function setClasses(elementDOM, classes) {
@@ -24,16 +18,8 @@ function setClasses(elementDOM, classes) {
   }
 }
 
-function containsClasses(elementDOM, classes) {
-  classes = isString(classes);
-
-  for (const element of classes) {
-    const isTrue = elementDOM.classList.contains(element);
-
-    if (isTrue) return true;
-  }
-
-  return false;
+function isCorrect(currentChar) {
+  return currentChar.classList.contains("correct") ? "correct" : "incorrect";
 }
 
-export { setClasses, containsClasses };
+export { setClasses, isCorrect };
