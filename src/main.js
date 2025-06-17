@@ -1,10 +1,10 @@
-import { separatedWordsSpaces } from "./utils/textParser.js";
+import { separatedWordsSpaces, loremGenerator } from "./utils/textParser.js";
 import { renderText } from "./modules/renderText.js";
 import { IndexManager } from "./modules/indexes.js";
 import { elementsDOM} from "./modules/elementsDOM.js";
 import { typingText } from "./modules/typingText.js";
 
-const words = separatedWordsSpaces();
+const words = loremGenerator(30);
 const target_charDOM = document.getElementById("target_char");
 renderText(target_charDOM, words);
 
