@@ -25,55 +25,30 @@ function newDefaultText(text) {
 
 function loremGenerator(num) {
   const defaultLorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
-  const words = matchText(defaultLorem);
+  const words = defaultLorem.match(/\S+/g);
 
   let templorem = null;
   let lorem = [];
   let rndNum = null;
 
   for (let i = 0; i < num; i++) {
-    rndNum = Math.floor(Math.random() * ((words.length - 1) - 0) + 0);
+    rndNum = Math.floor(Math.random() * words.length);
     
     lorem.push(words[rndNum]);
-    
-    if (i > 0) {
-      templorem = lorem[i - 1];
-    } else {
-      templorem = lorem[i];
-    }
-    
-    // if (lorem[i] === "\u00A0") {
-    //   num++;
-    //   continue;
-    // }
-    // console.log(templorem);
 
-    // // якщо попередній символ це пробіл і новий теж пробіл, пропусти його
-    // if (templorem === "\u00A0" && lorem[i] === "\u00A0") {
-    //   lorem.splice(i, 1);
-    //   i--;
-    //   num++;
-    //   console.log("111")
-    //   continue
+    // if (i > 1 && i < (num - 1)) {
+    //   templorem = lorem[i - 2];
+    //   console.log(templorem)
+    // } else {
+    //   templorem = lorem[i];
     // }
-    
-    //якщо перше слово не велике, зроби великим
-    if (i === 0 && lorem[0][0] !== lorem[0][0].toUpperCase()) {
-      lorem[0] = lorem[0][0].toUpperCase() + lorem[0].slice(1);
+
+    if ((i > 0 && i < (num - 1)) ) {
+      lorem.push("\u00A0");
     }
-    
-    // якщо слово починалось з великої або закінчувалось комою в кінці а нове слово з великої, зроби перший символ маленькою 
-    if (
-      (templorem[0] === templorem[0].toUpperCase() && lorem[i][0] === lorem[i][0].toUpperCase())
-      || (templorem.at(-1) === "," && lorem[i][0] === lorem[i][0].toUpperCase())
-    ) {
-      lorem[i] = lorem[i][0].toLowerCase() + lorem[i].slice(1);
-    }
-    
-    // якщо була крапка і слово не велике, зроби великим
-    if (templorem.at(-1) === "." && lorem[i][0] === lorem[i][0].toLowerCase()) {
-      lorem[i] = lorem[i][0].toUpperCase() + lorem[i].slice(1);
-    }
+
+
+
     
   }
   
