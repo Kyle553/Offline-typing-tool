@@ -28,12 +28,13 @@ function loremGenerator(num) {
 
   for (let i = 0; i < num; i++) {
     rndNum = Math.floor(Math.random() * words.length);
-    
+
     lorem.push(words[rndNum]);
     
-    // if (lorem[i] === lorem[i - 1]) {
-
-    // }
+    while (i > 0 && lorem[i] === lorem[i - 1]) {
+      rndNum = Math.floor(Math.random() * words.length);
+      lorem[i] = words[rndNum];
+    }
 
     if (i === 0) {
       templorem = lorem[i];
@@ -42,6 +43,8 @@ function loremGenerator(num) {
     if (i > 1 && i < num - 1) {
       templorem = lorem[i - 1]
     }
+
+// зробити рандомні крапки і коми
 
     // Зробити перший символ першого слова великим
     if (lorem[0][0] === lorem[0][0].toLowerCase()) {
@@ -75,6 +78,7 @@ function loremGenerator(num) {
     }
   }
   
+  //напевно це переписати по іншому
   lorem = lorem.flatMap((word, index) => index === lorem.length - 1 ? word : [word, "\u00A0"]);
 
   return lorem;  
