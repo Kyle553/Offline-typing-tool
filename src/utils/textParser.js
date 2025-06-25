@@ -20,8 +20,12 @@ function newDefaultText(text) {
 
 function loremGenerator(num) {
   const defaultLorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
-  const words = defaultLorem.match(/\S+/g);
-
+  const words = defaultLorem
+    .toLowerCase()
+    .replace(/[^\wа-яіїєґ']+/g, ' ') 
+    .trim()
+    .split(/\s+/);
+    
   let templorem = null;
   let lorem = [];
   let rndNum = null;
@@ -43,6 +47,7 @@ function loremGenerator(num) {
     if (i > 1 && i < num - 1) {
       templorem = lorem[i - 1]
     }
+
 
 // зробити рандомні крапки і коми
 
