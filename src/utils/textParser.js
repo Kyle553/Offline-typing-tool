@@ -57,15 +57,16 @@ function loremGenerator(num) {
       }
     };
 
-    for ([key, {chance, symbol}] of Object.entries(punctuationsChance)) {
-
+    let result = null;
+    // повертає останнє true
+    for (const [key, {chance, symbol}] of Object.entries(punctuationsChance)) {
+      const isTrue = Math.random() < (chance / 100)
+      if (isTrue) {
+        result = symbol;
+      }
     }
 
-
-
-
-
-
+    return result === undefined ? null : result;
   }
 
   const defaultLorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
@@ -81,6 +82,9 @@ function loremGenerator(num) {
 
   for (let i = 0; i < num; i++) {
     rndNum = Math.floor(Math.random() * words.length);
+    const rndPunctuation = getRandomPunctuationOrNone();
+    console.log(rndPunctuation);
+    
 
     lorem.push(words[rndNum]);
     
@@ -93,42 +97,49 @@ function loremGenerator(num) {
       previousWord = lorem[i];
     }
     
-    if (i > 1 && i < num - 1) {
+    if (i > 0 && i < num - 1) {
       previousWord = lorem[i - 1]
     }
 
-// зробити рандомні крапки і коми
+    // Перший символ першого слова зробити великим
+    if (i === 0) {
+      lorem[0] = lorem[0][0].toUpperCase() + lorem[0].slice(1);
+      continue;
+    }
 
-    // // Зробити перший символ першого слова великим
-    // if (lorem[0][0] === lorem[0][0].toLowerCase()) {
-    //   lorem[0] = lorem[0][0].toUpperCase() + lorem[0].slice(1);
-    // }
+    // Додати до останнього слова в кінець крапку
+    if (i === (num - 1)) {
+      lorem[i] = lorem[i] + ".";
+    }
 
-    // // Додати в кінці крапку
-    // if (i === (num - 1) && lorem[i].at(-1) !== "." ) {
-    //   lorem[i] = lorem[i] + ".";
-    // }
-    
-    // // Замінити в кінці кому на крапку
-    // if (i === (num - 1) && (lorem[i].at(-1) === "," && lorem[i].at(-1) !== "." )) {
-    //   lorem[i] = lorem[i].slice(0, -1) + ".";
-    // }
-    
-    // // Додай крапку позаду якщо слово починається з великою
-    // if (lorem[i][0] === lorem[i][0].toUpperCase() && previousWord.at(-1) !== "." && i > 0) {
-    //   if (previousWord.at(-1) !== ",") {
-    //     lorem[i - 1] = lorem[i - 1] + ".";
-    //   }
-      
-    //   if (previousWord.at(-1) === ",") {
-    //     lorem[i - 1] = lorem[i - 1].slice(0, -1) + ".";
-    //   }
-    // }
-    
-    // //Якщо позаду крапка заміни перший символ на великий
-    // if (previousWord.at(-1) === "." && lorem[i][0] === lorem[i][0].toLowerCase()) {
-    //   lorem[i] = lorem[i][0].toUpperCase() + lorem[i].slice(1);
-    // }
+    if (rndPunctuation === ",") {
+      lorem[i] = lorem[i] + ","
+    }
+
+    if (rndPunctuation === "?") {
+      lorem[i] = lorem[i] + "?"
+    }
+
+    // було дві коми підряд
+    // ЗРОБИТИ ДЛЯ : ІНШУ УМОВУ
+    if ([".", ",", "?", "!"].includes(rndPunctuation)) {
+      lorem[i] = lorem[i] + rndPunctuation;
+    }
+
+    //Якщо попереднє слово не закінчувалось на ".", "!", "?", ")" постав слово в подвійні лапки ""
+    if (rndPunctuation === `"` && ![".", "!", "?", "()"].includes(previousWord.at(-1))) {
+      lorem[i] = `"` + lorem[i] + `"`;
+    }
+
+    //Якщо попереднє слово не закінчувалось на ".", "!", "?", ")", `"` поєднай попереднє слово з теперішнім через тире
+    if (rndPunctuation === `-` && ![".", "!", "?", ")", `"` ].includes(previousWord.at(-1))) {
+      lorem[i] = previousWord + "-" + lorem[i];
+    }
+
+    // Якщо попереднє слово закінчилось ".", "!", "?" зроби перший символ слова великим
+    if ([".", "!", "?"].includes(previousWord.at(-1))) {
+      lorem[i] = lorem[i][0].toUpperCase() + lorem[i].slice(1);
+    }
   }
   
   //напевно це переписати по іншому
