@@ -112,16 +112,7 @@ function loremGenerator(num) {
       lorem[i] = lorem[i] + ".";
     }
 
-    if (rndPunctuation === ",") {
-      lorem[i] = lorem[i] + ","
-    }
-
-    if (rndPunctuation === "?") {
-      lorem[i] = lorem[i] + "?"
-    }
-
-    // було дві коми підряд
-    // ЗРОБИТИ ДЛЯ : ІНШУ УМОВУ
+    // ЗРОБИТИ ДЛЯ : ІНШУ УМОВУ ===============================================================
     if ([".", ",", "?", "!"].includes(rndPunctuation)) {
       lorem[i] = lorem[i] + rndPunctuation;
     }
