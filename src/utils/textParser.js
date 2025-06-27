@@ -93,37 +93,44 @@ function loremGenerator(num) {
       lorem[i] = words[rndNum];
     }
 
+    // в кінці після крапки може бути кома
+    // якщо в кінці подвійні лапки то крапка в середині лапок
+    // пофіксити подвійні знаки в кінці
+
+    // Перший символ першого слова зробити великим
     if (i === 0) {
       previousWord = lorem[i];
+      
+      lorem[0] = lorem[0][0].toUpperCase() + lorem[0].slice(1);
+      continue;
     }
     
     if (i > 0 && i < num - 1) {
       previousWord = lorem[i - 1]
     }
 
-    // Перший символ першого слова зробити великим
-    if (i === 0) {
-      lorem[0] = lorem[0][0].toUpperCase() + lorem[0].slice(1);
-      continue;
-    }
-
+    // зробити випадковий символ в кінці
     // Додати до останнього слова в кінець крапку
     if (i === (num - 1)) {
       lorem[i] = lorem[i] + ".";
+
     }
 
-    // ЗРОБИТИ ДЛЯ : ІНШУ УМОВУ ===============================================================
     if ([".", ",", "?", "!"].includes(rndPunctuation)) {
       lorem[i] = lorem[i] + rndPunctuation;
     }
 
-    //Якщо попереднє слово не закінчувалось на ".", "!", "?", ")" постав слово в подвійні лапки ""
-    if (rndPunctuation === `"` && ![".", "!", "?", "()"].includes(previousWord.at(-1))) {
-      lorem[i] = `"` + lorem[i] + `"`;
+    //Якщо попереднє слово не закінчувалось на ".", "!", "?", ")", `"`" постав слово в подвійні лапки ""
+    if ([`"`, "()"].includes(rndPunctuation) && ![".", "!", "?", ")", `"`].includes(previousWord.at(-1))) {
+      if (rndPunctuation === "()") {
+        lorem[i] = "(" + lorem[i] + `)`;
+      } else {
+        lorem[i] = `"` + lorem[i] + `"`;
+      }
     }
 
     //Якщо попереднє слово не закінчувалось на ".", "!", "?", ")", `"` поєднай попереднє слово з теперішнім через тире
-    if (rndPunctuation === `-` && ![".", "!", "?", ")", `"` ].includes(previousWord.at(-1))) {
+    if (rndPunctuation === `-` && ![".", "!", "?", ")", `"`, ":" ].includes(previousWord.at(-1))) {
       lorem[i] = previousWord + "-" + lorem[i];
     }
 
