@@ -25,11 +25,11 @@ function loremGenerator(num) {
     const punctuationsChance = {
       comma: {
         chance: 7,       
-        symbol: ','      
+        symbol: ","
       },
       period: {
         chance: 4,
-        symbol: '.'
+        symbol: "."
       },
       doubleQuotes: {
         chance: 2,
@@ -37,36 +37,47 @@ function loremGenerator(num) {
       },
       hyphen: {
         chance: 1,
-        symbol: '-'
+        symbol: "-"
       },
       questionMark: {
         chance: 0.6,
-        symbol: '?'
+        symbol: "?"
       },
       exclamationMark: {
         chance: 0.5,
-        symbol: '!'
+        symbol: "!"
       },
       colon: {
         chance: 0.4,
-        symbol: ':'
+        symbol: ":"
       },
       brackets: {
         chance: 0.3,
-        symbol: '()'
+        symbol: "()"
       }
     };
 
     let result = null;
+
     // повертає останнє true
     for (const [key, {chance, symbol}] of Object.entries(punctuationsChance)) {
       const isTrue = Math.random() < (chance / 100)
       if (isTrue) {
         result = symbol;
+        countNull = 0;
       }
     }
 
-    return result === undefined ? null : result;
+    if (result === null) countNull++;
+
+    if (countNull === 8 && result === null) {
+      const punctuations = Object.values(punctuationsChance).map(obj => obj.symbol)
+      const randomPunctuation = punctuations[randomIntBelow(8)]
+
+      return randomPunctuation
+    }
+
+    return result;
   }
 
   function randomIntBelow(num) {
@@ -80,9 +91,20 @@ function loremGenerator(num) {
     .trim()
     .split(/\s+/);
 
+  let countNull = 0;
   let previousWord = null;
   let cleanPreviousWord = null;
   let lorem = [];
+
+  const punctuationsFilters = {
+    quotesAndBrackets: [".", "!", "?", ")", '"', ":"],
+    hyphen: [".", "!", "?", ",", ")", '"', ":"]
+  };
+
+  const punctuationSearch = {
+    quotesAndBrackets: ['"', "()"],
+    endOrSeparator: [".", "!", "?", ",", ":"]
+  };
 
   for (let i = 0; i < num; i++) {
     const randomPunctuation = getRandomPunctuationOrNone();
@@ -105,8 +127,8 @@ function loremGenerator(num) {
       lorem[i] = words[randomIntBelow(words.length)];
     }
 
-
-    // переписати [".", "!", "?", ")", `"`] в щось нормальне з одним масивом
+    // почитати детальніше про hoisting в функціях
+    // відправляти слово в getRandomPunctuationOrNone щоб він вже повертав готове?
 
 
     // .toUpperCase()
@@ -122,25 +144,31 @@ function loremGenerator(num) {
       continue;
     }
 
-    // Cимволи ".", "!", "?", ","
-    // Додай в кінець слова символ з randomPunctuation якщо хоч 1 символом співпадає зі списку ".", "!", "?", ","
-    if ([".", "!", "?", ","].includes(randomPunctuation)) {
+    // Cимволи ".", "!", "?", ",", ":"
+    // Додай в кінець слова символ з randomPunctuation якщо хоч 1 символом співпадає зі списку ".", "!", "?", ",", ":"
+    if (punctuationSearch.endOrSeparator.includes(randomPunctuation)) {
       lorem[i] = lorem[i] + randomPunctuation;
     }
     
     // Cимвол "" або ()
-    //Якщо попереднє слово не закінчувалось на ".", "!", "?", ")", `"`" постав слово в "" або ()
-    if ([`"`, "()"].includes(randomPunctuation) && ![".", "!", "?", ")", `"`].includes(previousWord.at(-1))) {
+    //Якщо попереднє слово не закінчувалось на ".", "!", "?", ")", '"'", ":" постав слово в "" або ()
+    if (
+      punctuationSearch.quotesAndBrackets.includes(randomPunctuation) 
+      && !punctuationsFilters.quotesAndBrackets.includes(previousWord.at(-1))
+    ) {
       if (randomPunctuation === "()") {
         lorem[i] = "(" + lorem[i] + ")";
       } else {
-        lorem[i] = `"` + lorem[i] + `"`;
+        lorem[i] = '"' + lorem[i] + '"';
       }
     }
     
     // Символ -
-    // Якщо попереднє слово не закінчувалось на ".", "!", "?", ",", ")", `"`, ":" поєднай попереднє слово з теперішнім через тире
-    if (randomPunctuation === `-` && ![".", "!", "?", ",", ")", `"`, ":" ].includes(previousWord.at(-1))) {
+    // Якщо попереднє слово не закінчувалось на ".", "!", "?", ",", ")", '"', ":" поєднай попереднє слово з теперішнім через тире
+    if (
+      randomPunctuation === `-` 
+      && !punctuationsFilters.hyphen.includes(previousWord.at(-1))
+    ) {
       let leftWord = words[randomIntBelow(words.length)];
       let rightWord = lorem[i];
 
