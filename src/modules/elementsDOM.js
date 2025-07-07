@@ -7,11 +7,14 @@ class elementsDOM {
     this.currentChar = null;
   }
 
-  refresh() {
-    // this.allWords = document.querySelectorAll(".word");
+  refreshCurrentWord() {
     this.currentWord = this.allWords[this.indexes.currentWord()];
     this.allChars = this.currentWord.querySelectorAll("span");
     this.currentChar = this.allChars[this.indexes.currentChar()];
+  }
+
+  refreshWords() {
+    this.allWords = document.querySelectorAll(".word");
   }
 }
 

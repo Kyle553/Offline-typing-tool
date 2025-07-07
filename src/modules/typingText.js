@@ -23,7 +23,7 @@ function typingText(event, words, index, dom) {
       currentWord = words[index.currentWord()];
       index.replaceChar(currentWord.length - 1);
 
-      dom.refresh();
+      dom.refreshCurrentWord();
       setClasses(dom.currentChar, ["word_active", isCorrect(dom.currentChar)]);
       dom.currentChar.scrollIntoView({ behavior: "smooth", block: "center" });
       return;
@@ -40,7 +40,7 @@ function typingText(event, words, index, dom) {
 
       setClasses(dom.currentChar, "word_active");
       index.previousChar();
-      dom.refresh();
+      dom.refreshCurrentWord();
       setClasses(dom.currentChar, ["word_active", isCorrect(dom.currentChar)]);
     }
   };
@@ -64,7 +64,7 @@ function typingText(event, words, index, dom) {
     if (index.currentChar() < (currentWord.length - 1)) {
       setClasses(dom.currentChar, "word_active");
       index.nextChar();
-      dom.refresh();
+      dom.refreshCurrentWord();
       setClasses(dom.currentChar, "word_active");
       return;
     }
@@ -72,7 +72,7 @@ function typingText(event, words, index, dom) {
     if (isLastChar(words, index) && index.currentWord() < (words.length - 1)) {
       setClasses(dom.currentChar, "word_active");
       index.nextWord();
-      dom.refresh();
+      dom.refreshCurrentWord();
       dom.currentChar.scrollIntoView({ behavior: "smooth", block: "center" });
       setClasses(dom.currentChar, "word_active");
       return;
