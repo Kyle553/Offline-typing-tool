@@ -84,7 +84,6 @@ function getLoremWords(num) {
 
   for (let i = 0; i < num; i++) {
     const randomPunctuation = getRandomPunctuationOrNone();
-    console.log(randomPunctuation);
     
     loremWords.push(words[randomIntBelow(words.length)]);
     
