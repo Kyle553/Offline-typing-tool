@@ -1,10 +1,11 @@
 import { setClasses, isCorrect} from "../utils/classManagerDOM.js";
 import { isLastChar, isLastWord } from "../utils/isLastElement.js";
-import { getLoremWords } from "../utils/loremGenerator.js";
 
-function typingLogic(event, words, index, dom) {
+function typingLogic(event, contextTyping, typingStats) {
+  // Деструктуризація об'єкта з об'єктами
+  const { words, index, dom } = contextTyping;
+
   let currentWord = words[index.currentWord()];
-  let currentOffsetTop = dom.currentWord.offsetTop;
 
   function backspace() {
     if (index.currentChar() === 0 && index.currentWord() > 0) {
@@ -75,29 +76,13 @@ function typingLogic(event, words, index, dom) {
     }
   };
 
-  const allWordsNode = Array.from(dom.allWords);
-
-  // offsetTop 97, 207, 317, 427 
-  // .remove()
-  // .shift()
-  function deleteOldWords() {
-    if (currentOffsetTop >= 427) {
-      for (let i = 0; allWordsNode[i].offsetTop <= 97; i++) {
-
-
-      }
-    }
-  }
-
   if (event.key === "Backspace") {
     backspace();
-    deleteOldWords();
     return;
   }
   
   if (event.key.length === 1) {
     handleTypingChar();
-    deleteOldWords();
     return;
   }
 };
