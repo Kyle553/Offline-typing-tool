@@ -1,13 +1,19 @@
 import { setClasses, isCorrect} from "../utils/classManagerDOM.js";
 import { isLastChar, isLastWord } from "../utils/isLastElement.js";
 
+let writtenWordsNodes = [];
+
 function typingLogic(event, contextTyping, typingStats) {
-  // Деструктуризація об'єкта з об'єктами
+  // Деструктуризація об'єкта з об'єктами за посиланням
   const { words, index, dom } = contextTyping;
 
   let currentWord = words[index.currentWord()];
 
   function backspace() {
+    if (index.currentChar() === 0) {
+      writtenWordsNodes.pop();
+    }
+
     if (index.currentChar() === 0 && index.currentWord() > 0) {
       setClasses(dom.currentChar, "word_active");
       
@@ -39,19 +45,28 @@ function typingLogic(event, contextTyping, typingStats) {
   };
   
   function handleTypingChar() {
+    let charStatusClass = "";
+
     if (
       isLastChar(words, index) && isLastWord(words, index) 
       && !dom.currentChar.classList.contains("word_active")
     ) {
       return;
     }
-    
-    const charStatusClass = 
-    currentWord[index.currentChar()] === event.key  
-    || (event.key === " " && currentWord[index.currentChar()] === "\u00A0")
-    ? "correct"
-    : "incorrect";
-    
+
+    typingStats.totalChars++;
+
+    if (
+      currentWord[index.currentChar()] === event.key
+      || (event.key === " " && currentWord[index.currentChar()] === "\u00A0")
+    ) {
+      typingStats.correctChars++;
+      charStatusClass = "correct";
+    } else {
+      typingStats.errorsCount++
+      charStatusClass = "incorrect";
+    }
+
     setClasses(dom.currentChar, charStatusClass);
     
     if (index.currentChar() < (currentWord.length - 1)) {
@@ -60,6 +75,33 @@ function typingLogic(event, contextTyping, typingStats) {
       dom.refreshCurrentWord();
       setClasses(dom.currentChar, "word_active");
       return;
+    }
+
+    let countCorrectChars = 0;
+    let nodeCount = 0;
+
+    for (const node of dom.allChars) {
+      if (currentWord === "\u00A0" || writtenWordsNodes.at(-1) === dom.currentWord) {
+        // console.log("1")
+        break;
+      }
+      // console.log("2");
+      // console.log(writtenWordsNodes.at(-1));
+      // console.log(dom.currentWord);
+      nodeCount++;
+
+      if (node.classList.contains("correct")) {
+        countCorrectChars++;
+      }
+
+      if (countCorrectChars === currentWord.length) {
+        typingStats.correctWords++;
+      }
+      
+      if (nodeCount === currentWord.length) {
+        typingStats.totalWords++;
+        writtenWordsNodes.push(dom.currentWord)
+      }
     }
     
     if (isLastChar(words, index) && index.currentWord() < (words.length - 1)) {
