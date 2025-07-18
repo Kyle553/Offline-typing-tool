@@ -1,7 +1,7 @@
 import { setClasses, isCorrect} from "../utils/classManagerDOM.js";
 import { isLastChar, isLastWord } from "../utils/isLastElement.js";
 
-let writtenWordsNodes = [];
+// let writtenWordsNodes = [];
 
 function typingLogic(event, contextTyping, typingStats) {
   // Деструктуризація об'єкта з об'єктами за посиланням
@@ -10,10 +10,6 @@ function typingLogic(event, contextTyping, typingStats) {
   let currentWord = words[index.currentWord()];
 
   function backspace() {
-    if (index.currentChar() === 0) {
-      writtenWordsNodes.pop();
-    }
-
     if (index.currentChar() === 0 && index.currentWord() > 0) {
       setClasses(dom.currentChar, "word_active");
       
@@ -42,6 +38,15 @@ function typingLogic(event, contextTyping, typingStats) {
       dom.refreshCurrentWord();
       setClasses(dom.currentChar, ["word_active", isCorrect(dom.currentChar)]);
     }
+
+    // if (
+    //   index.currentChar() === 0 
+    //   && currentWord !== "\u00A0"
+    //   && writtenWordsNodes.at(-1) === dom.currentWord
+    // ) {
+    //   writtenWordsNodes.pop();
+    //   console.log(writtenWordsNodes)
+    // }
   };
   
   function handleTypingChar() {
@@ -77,32 +82,42 @@ function typingLogic(event, contextTyping, typingStats) {
       return;
     }
 
-    let countCorrectChars = 0;
-    let nodeCount = 0;
+    // let tempCurrentWord = "";
+    // let countCorrectChars = 0;
+    // let nodeCount = 0;
+    // const quotesAndBrackets = ['"', "()"];
+    // const endOrSeparator = [".", "!", "?", ",", ":"];
 
-    for (const node of dom.allChars) {
-      if (currentWord === "\u00A0" || writtenWordsNodes.at(-1) === dom.currentWord) {
-        // console.log("1")
-        break;
-      }
-      // console.log("2");
-      // console.log(writtenWordsNodes.at(-1));
-      // console.log(dom.currentWord);
-      nodeCount++;
+    // function statisticsCounter() {
+    //   if (currentWord === "\u00A0" || writtenWordsNodes.at(-1) === dom.currentWord) {
+    //     return;
+    //   }
 
-      if (node.classList.contains("correct")) {
-        countCorrectChars++;
-      }
+    //   tempCurrentWord = currentWord;
+    //   nodeCount++;
 
-      if (countCorrectChars === currentWord.length) {
-        typingStats.correctWords++;
-      }
+    //   if (quotesAndBrackets.includes(currentWord)) {
+    //     for (let i = 1; i < (currentWord.length - 1); i++) {
+    //       if (dom.allWords[i].contains("correct")) {
+    //         countCorrectChars++;
+    //       }
+    //     }
+    //   }
       
-      if (nodeCount === currentWord.length) {
-        typingStats.totalWords++;
-        writtenWordsNodes.push(dom.currentWord)
-      }
-    }
+    //   if (node.classList.contains("correct")) {
+    //     countCorrectChars++;
+    //   }
+      
+    //   if (countCorrectChars === currentWord.length) {
+    //     typingStats.correctWords++;
+    //   }
+      
+    //   if (nodeCount === currentWord.length) {
+    //     typingStats.totalWords++;
+    //     writtenWordsNodes.push(dom.currentWord)
+    //     console.log(writtenWordsNodes)
+    //   }
+    // }
     
     if (isLastChar(words, index) && index.currentWord() < (words.length - 1)) {
       setClasses(dom.currentChar, "word_active");

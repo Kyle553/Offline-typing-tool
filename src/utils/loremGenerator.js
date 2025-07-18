@@ -82,6 +82,8 @@ function getLoremWords(num) {
     endOrSeparator: [".", "!", "?", ",", ":"]
   };
 
+  const punctuationsEnds = [".", "!", "?"];
+
   for (let i = 0; i < num; i++) {
     const randomPunctuation = getRandomPunctuationOrNone();
     
@@ -104,14 +106,14 @@ function getLoremWords(num) {
 
     // .toUpperCase()
     // Якщо попереднє слово закінчилось ".", "!", "?" зроби перший символ слова великим
-    if ([".", "!", "?"].includes(previousWord.at(-1))) {
+    if (punctuationsEnds.includes(previousWord.at(-1))) {
       loremWords[i] = loremWords[i][0].toUpperCase() + loremWords[i].slice(1);
     }
 
     // Cимволи в кінець останнього слова ".", "!", "?"
     // Додати до останнього слова в кінець рандомну закінчувальну пунктуацію і перейди -ДО НАСТУПНОГО ЦИКЛУ-
     if (i === (num - 1)) {
-      loremWords[i] = loremWords[i] + [".", "!", "?"][randomIntBelow(3)];
+      loremWords[i] = loremWords[i] + punctuationsEnds[randomIntBelow(3)];
       continue;
     }
 
