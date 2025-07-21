@@ -82,43 +82,37 @@ function typingLogic(event, contextTyping, typingStats) {
       return;
     }
 
-    // let tempCurrentWord = "";
-    // let countCorrectChars = 0;
-    // let nodeCount = 0;
-    // const quotesAndBrackets = ['"', "()"];
-    // const endOrSeparator = [".", "!", "?", ",", ":"];
-
-    // function statisticsCounter() {
-    //   if (currentWord === "\u00A0" || writtenWordsNodes.at(-1) === dom.currentWord) {
-    //     return;
-    //   }
-
-    //   tempCurrentWord = currentWord;
-    //   nodeCount++;
+    // if (currentWord !== "\u00A0" && writtenWordsNodes.at(-1) !== dom.currentWord) {
+    //   const quotesAndBrackets = ['"', "()"];
+    //   const endOrSeparator = [".", "!", "?", ",", ":"];
+    //   let startIndex = 0;
+    //   let expectedCorrectCharCount = 0;
+    //   let countCorrectChars = 0;
 
     //   if (quotesAndBrackets.includes(currentWord)) {
-    //     for (let i = 1; i < (currentWord.length - 1); i++) {
-    //       if (dom.allWords[i].contains("correct")) {
-    //         countCorrectChars++;
-    //       }
+    //     startIndex = 1;
+    //     expectedCorrectCharCount = currentWord.length - 2;
+    //   } 
+  
+    //   if(endOrSeparator.includes(currentWord)) {
+    //     expectedCorrectCharCount = currentWord.length - 1;
+    //   }
+  
+    //   for (let i = startIndex; i < startIndex + expectedCorrectCharCount; i++) {
+    //     if (dom.allChars[i].contains("correct")) {
+    //       countCorrectChars++;
     //     }
     //   }
       
-    //   if (node.classList.contains("correct")) {
-    //     countCorrectChars++;
-    //   }
-      
-    //   if (countCorrectChars === currentWord.length) {
+    //   if (countCorrectChars === expectedCorrectCharCount) {
     //     typingStats.correctWords++;
     //   }
-      
-    //   if (nodeCount === currentWord.length) {
-    //     typingStats.totalWords++;
-    //     writtenWordsNodes.push(dom.currentWord)
-    //     console.log(writtenWordsNodes)
-    //   }
+  
+    //   typingStats.totalWords++;
+    //   writtenWordsNodes.push(dom.currentWord)
+    //   console.log(writtenWordsNodes)
     // }
-    
+
     if (isLastChar(words, index) && index.currentWord() < (words.length - 1)) {
       setClasses(dom.currentChar, "word_active");
       index.nextWord();
