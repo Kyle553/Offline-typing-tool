@@ -20,6 +20,7 @@ let typingStats = {
   correctWords: 0,
   correctChars: 0,
   errorsCount: 0,       
+  backspacesCount : 0,
   accuracy: 0         // Точність у відсотках
 }
 
