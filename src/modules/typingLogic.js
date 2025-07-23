@@ -2,6 +2,7 @@ import { setClasses, isCorrect} from "../utils/classManagerDOM.js";
 import { isLastChar, isLastWord } from "../utils/isLastElement.js";
 
 // let writtenWordsNodes = [];
+// let writtenCharsNodes = [];
 
 function typingLogic(event, contextTyping, typingStats) {
   // Деструктуризація об'єкта з об'єктами за посиланням
@@ -88,6 +89,7 @@ function typingLogic(event, contextTyping, typingStats) {
     //   let startIndex = 0;
     //   let expectedCorrectCharCount = 0;
     //   let countCorrectChars = 0;
+    //   let isCharNodeWritten = writtenCharsNodes.some(node => node === dom.currentChar);
 
     //   if (quotesAndBrackets.includes(currentWord)) {
     //     startIndex = 1;
