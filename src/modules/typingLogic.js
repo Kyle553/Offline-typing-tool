@@ -1,11 +1,20 @@
 import { setClasses, isCorrect} from "../utils/classManagerDOM.js";
 import { isLastChar, isLastWord } from "../utils/isLastElement.js";
 
-function typingLogic(event, contextTyping, typingStats) {
-  // Деструктуризація об'єкта з об'єктами за посиланням
-  const { words, index, dom } = contextTyping;
+// const wordsStatus = [
+//   {
+//     isWordWritten: false,
+//     isCharsWritten: [true, true, true, undefined, undefined]
+//   }
+// ]
 
+const wordsStatus = [];
+
+function typingLogic(event, contextTyping) {
+  // Деструктуризація об'єкта з об'єктами за посиланням
+  const { words, index, dom, stats } = contextTyping;
   let currentWord = words[index.currentWord()];
+  let isCharsWritten = wordsStatus[index.currentWord].isCharsWritten;  
 
   function backspace() {
     if (index.currentChar() === 0 && index.currentWord() > 0) {
@@ -46,6 +55,16 @@ function typingLogic(event, contextTyping, typingStats) {
       return;
     }
     
+    // Якщо для слова ще не було створено обєкта створи в wordsStatus[index.currentWord]
+    if (wordsStatus[index.currentWord()] === undefined) {
+      wordsStatus[index.currentWord()] = {
+        isWordWritten: false,
+        isCharsWritten: []
+      };
+    }
+
+    stats.incrementTotalChars();
+
     let charStatusClass = "";
 
     if (
@@ -55,6 +74,11 @@ function typingLogic(event, contextTyping, typingStats) {
       charStatusClass = "correct";
     } else {
       charStatusClass = "incorrect";
+    }
+
+    // Якщо символ ще не був написаний довай в wordsStatus[index.currentWord].isCharsWritten[index.currentChar] true
+    if (isCharsWritten[index.currentChar] === undefined) {
+      isCharsWritten[index.currentChar].push(true);
     }
 
     setClasses(dom.currentChar, charStatusClass);

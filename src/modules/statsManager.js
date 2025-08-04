@@ -1,36 +1,83 @@
 class Stats {
-  #writtenWordsNodes = [];
-  #writtenCharsNodes = [];
-  
-  constructor(index, dom) {
-    this.index = index,
-    this.dom = dom
+  #totalWords;
+  #totalChars;
+  #correctWords;
+  #correctChars;
+  #errorsCount;
+  #backspacesCount;
+  #accuracy;
+  #start;
+  #end;
+  #pause;
+
+  constructor() {
+    this.#totalWords = 0;
+    this.#totalChars = 0;
+    this.#correctWords = 0;
+    this.#correctChars = 0;
+    this.#errorsCount = 0;
+    this.#backspacesCount = 0;
+    this.#accuracy = 0;
+    // Date.now()
+    this.#start = null;
+    this.#end = null;
+    this.#pause = []; // Масив об'єктів, коли зникає і з'являється фокус
   }
-  
-  #originalWord = "";
-  #cleanWord = "";
-  
-  filter(currentWord) {
-    this.#originalWord = currentWord;
 
-    const quotesAndBrackets = ['"', ")"];
-    const endOrSeparator = [".", "!", "?", ",", ":"];
-    let startIndex = 0;
-    let expectedCharCount = 0;
-
-    if (quotesAndBrackets.includes(currentWord.at(-1))) {
-      startIndex = 1;
-      expectedCharCount = currentWord.length - 2;
-    } 
-
-    if(endOrSeparator.includes(currentWord.at(-1))) {
-      expectedCharCount = currentWord.length - 1;
-    }
-
-    if (expectedCharCount > 0) {
-      this.#cleanWord = currentWord.slice(startIndex, (startIndex + expectedCharCount));
-    } else {
-      this.#cleanWord = currentWord;
-    }
+  // totalWords
+  incrementTotalWords() {
+    this.#totalWords++;
   }
+
+  decrementTotalWords() {
+    this.#totalWords--;
+  }
+
+  // totalChars
+  incrementTotalChars() {
+    this.#totalChars++;
+  }
+
+  decrementTotalChars() {
+    this.#totalChars--;
+  }
+
+  // correctWords
+  incrementCorrectWords() {
+    this.#correctWords++;
+  }
+
+  decrementCorrectWords() {
+    this.#correctWords--;
+  }
+
+  // correctChars
+  incrementCorrectChars() {
+    this.#correctChars++;
+  }
+
+  decrementCorrectChars() {
+    this.#correctChars--;
+  }
+
+  // errorsCount
+  incrementErrorsCount() {
+    this.#errorsCount++;
+  }
+
+  decrementErrorsCount() {
+    this.#errorsCount--;
+  }
+
+  // backspacesCount
+  incrementBackspacesCount() {
+    this.#backspacesCount++;
+  }
+
+  decrementBackspacesCount() {
+    this.#backspacesCount--;
+  }
+
 }
+
+export { Stats };
